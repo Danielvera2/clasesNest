@@ -19,10 +19,12 @@
     "noFallthroughCasesInSwitch": false,
     "paths":{
     "@ventas/entities": ["./src/ventas/entities"],
-    "@ventas/dto": ["./src/ventas/dto"],
+    "@ventas/dtos": ["./src/ventas/dtos"],
+    "@ventas/providers": ["./src/ventas/providers"],
     "@ventas/services": ["./src/ventas/services"],
     "@ventas/controllers": ["./src/ventas/controllers"],
-    "@ventas/modules": ["./src/ventas/modules"]
+    "@ventas/modules": ["./src/ventas/modules"],
+    "@ventas/database": ["./src/ventas/database"]
     }
   }
 }
