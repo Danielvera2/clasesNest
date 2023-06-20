@@ -2,7 +2,7 @@ import { BaseProductDto } from './base-product.dto';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class ReadProduct extends BaseProductDto {
+export class ReadProductDto extends BaseProductDto {
   @Expose()
   readonly title;
 
