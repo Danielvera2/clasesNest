@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, isString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { isStringValidationOptions } from "@shared/validations";
 
 export class BaseProductDto {
-  @IsString( isStringValidationOption() )
+  @IsString( isStringValidationOptions() )
   @IsNotEmpty()
   readonly title: string;
 

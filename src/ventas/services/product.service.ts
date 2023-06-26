@@ -9,6 +9,8 @@ import { ReadProductDto } from '../dtos/products/read-product.dto';
 import { FilterProductDto } from '../dtos/products/filter-product.dto';
 import { PaginationDto } from '../dtos/pagination.dto';
 import { UpdateProductDto } from '../products/dto/update-product.dto';
+import {ServiceResponseHttpModel } from '@shared/models'
+import { ParamsTokenFactory } from '@nestjs/core/pipes';
 
 
 @Injectable()
@@ -28,7 +30,7 @@ export class ProductService {
     const response = await this.repository.findAndCount({ take: 100 });
     return {
       data: response[0],
-      pagination: { totalItems: response(), limit: 10 },
+      pagination: { totalItems: response[1], limit: 10 },
     };
   }
   async findAll(params?: FilterProductDto): Promise<ServiceResponseHttpModel> {
@@ -57,31 +59,35 @@ export class ProductService {
   //! Metodo update
   //! se los puede hacer genericos para usar en los demas servicios de la aplicacion con el nombre response
   //! si se quiere distinguir se debe llamarlo dependiendo del servicio ejemplo product
-  async update(id: string, payload: UpdateProductDto) {
-    const product = await this.repository.findOneBy({ id });
+  async update(id: string, payload: UpdateProductDto):Promise<ServiceResponseHttpModel> {
+    const product = await this.repository.preload({ id, ...payload });
 
     if (!product) {
       throw new NotFoundException('Producto no encontrado');
     }
 
-    this.repository.merge(product, payload);
+    const productUpdate = await this.repository.save(product);
 
-    return this.repository.save(product);
+    return {
+      data: plainToInstance(ReadProductDto, product)
+    } 
   }
   //! metodo para eliminar el id
-  async remove(id: string) {
+  async remove(id: string):Promise<ServiceResponseHttpModel> {
     const product = await this.repository.findOneBy({ id });
 
     if (!product) {
       throw new NotFoundException('product no encontrado');
     }
-
-    return await this.repository.softRemove(product);
+    const productDeleted = this.repository.softRemove(product);
+    return { data: plainToInstance(ReadProductDto, productDeleted)};
+    
   }
 
   //!Metodo para renover todo el objeto
-  async removeAll(payload: ProductEntity[]) {
-    return this.repository.softRemove(payload);
+  async removeAll(payload: ProductEntity[]):Promise<ServiceResponseHttpModel> {
+    const productDeleted = this.repository.softRemove(payload);
+    return {data:productDeleted};
   }
 
   //! Metodo Pagination and filter

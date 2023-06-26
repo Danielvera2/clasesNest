@@ -24,7 +24,11 @@
     "@ventas/services": ["./src/ventas/services"],
     "@ventas/controllers": ["./src/ventas/controllers"],
     "@ventas/modules": ["./src/ventas/modules"],
-    "@ventas/database": ["./src/ventas/database"]
+    "@ventas/database": ["./src/ventas/database"],
+    "@shared/enums":["./src/shared/enums"],
+    "@shared/validations":["./src/shared/validation"],
+    "@shared/models":["./src/shared/models"],
+
     }
   }
 }
